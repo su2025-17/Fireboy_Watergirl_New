@@ -3,7 +3,7 @@ using UnityEngine;
 public class PlayerMovement : MonoBehaviour
 {
     public float moveSpeed = 5f;
-    public float rotationSpeed = 720f;
+    public float rotationSpeed = 0.001f;
     public float jumpForce = 5f;
     
     // Choose between "Arrows" or "WASD" in the Inspector
@@ -13,42 +13,46 @@ public class PlayerMovement : MonoBehaviour
     private Rigidbody rb;
     private bool isGrounded;
     private Vector3 moveDir;
+    private float turnInput;
 
     void Start() {
         rb = GetComponent<Rigidbody>();
     }
 
     void Update() {
-        float h = 0;
-        float v = 0;
+        float forward = 0f;
+        float turn = 0f;
 
         if (controlScheme == ControlType.Arrows) {
-            if (Input.GetKey(KeyCode.UpArrow)) v = -1;   // Move away from camera on Up
-            if (Input.GetKey(KeyCode.DownArrow)) v = 1;  // Move toward camera on Down
-            if (Input.GetKey(KeyCode.LeftArrow)) h = -1;
-            if (Input.GetKey(KeyCode.RightArrow)) h = 1;
+            if (Input.GetKey(KeyCode.UpArrow)) forward = 1;
+            if (Input.GetKey(KeyCode.DownArrow)) forward = -1;
+            if (Input.GetKey(KeyCode.LeftArrow)) turn = -1;
+            if (Input.GetKey(KeyCode.RightArrow)) turn = 1;
             
-            // Jump for Arrows (Space)
-            if (Input.GetKeyDown(KeyCode.Space) && isGrounded) Jump();
+            if (Input.GetKeyDown(KeyCode.Space)) Jump();
         } 
         else if (controlScheme == ControlType.WASD) {
-            if (Input.GetKey(KeyCode.W)) v = 1;
-            if (Input.GetKey(KeyCode.S)) v = -1;
-            if (Input.GetKey(KeyCode.A)) h = -1;
-            if (Input.GetKey(KeyCode.D)) h = 1;
+            if (Input.GetKey(KeyCode.W)) forward = 1;
+            if (Input.GetKey(KeyCode.S)) forward = -1;
+            if (Input.GetKey(KeyCode.A)) turn = -1;
+            if (Input.GetKey(KeyCode.D)) turn = 1;
             
-            // Jump for WASD (Left Shift or whatever you prefer)
-            if (Input.GetKeyDown(KeyCode.LeftShift) && isGrounded) Jump();
+            if (Input.GetKeyDown(KeyCode.LeftShift)) Jump();
         }
 
-        moveDir = new Vector3(h, 0, v).normalized;
+        moveDir = transform.forward * forward;
+        moveDir.y = 0f;
+        moveDir = moveDir.normalized;
+        turnInput = turn;
     }
 
     void FixedUpdate() {
+        if (turnInput != 0f) {
+            rb.MoveRotation(rb.rotation * Quaternion.Euler(0f, turnInput * rotationSpeed * Time.fixedDeltaTime, 0f));
+        }
+
         if (moveDir.magnitude >= 0.1f) {
             rb.MovePosition(rb.position + moveDir * moveSpeed * Time.fixedDeltaTime);
-            Quaternion targetRot = Quaternion.LookRotation(moveDir, Vector3.up);
-            rb.MoveRotation(Quaternion.RotateTowards(rb.rotation, targetRot, rotationSpeed * Time.fixedDeltaTime));
         }
     }
 
