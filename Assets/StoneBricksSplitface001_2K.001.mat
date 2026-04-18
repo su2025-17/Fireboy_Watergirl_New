@@ -9,7 +9,7 @@ Material:
   m_PrefabAsset: {fileID: 0}
   m_Name: StoneBricksSplitface001_2K.001
   m_Shader: {fileID: 46, guid: 0000000000000000f000000000000000, type: 0}
-  m_Parent: {fileID: 2100000, guid: 5e467488d8d5e4544b81fac7fe4cd79a, type: 2}
+  m_Parent: {fileID: 2100000, guid: ab1c7819132f145b88b27b20764e9fac, type: 2}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords:
   - _NORMALMAP
