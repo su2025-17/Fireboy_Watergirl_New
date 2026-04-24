@@ -9,6 +9,6 @@ public class SweeperRotation : MonoBehaviour
     {
         // 0 on X, 'speed' on Y, 0 on Z. 
         // Space.World ensures the rotation stays flat regardless of the cylinder's orientation.
-        transform.Rotate(0, speed * Time.deltaTime, 0, Space.World);
+        transform.Rotate(0, -speed * Time.deltaTime, 0, Space.World);
     }
 }
