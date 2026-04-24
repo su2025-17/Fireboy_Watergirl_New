@@ -7,6 +7,10 @@ TagManager:
   - CinemachineTarget
   - Ground
   - Underground
+  - Red
+  - Blue
+  - Yellow
+  - Fireboy
   layers:
   - Default
   - TransparentFX
